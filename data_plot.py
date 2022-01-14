@@ -39,13 +39,13 @@ with open('./result.csv') as f:
             xhat[i].append(nums[i+6])
 
 # 描画
-ax1.plot(t, x[0],    label="Reference", color="black") # 真値
+ax1.plot(t, x[0],    label="True", color="black") # 真値
 ax1.plot(t, xhat[0], label="Estimated", color="red", linestyle = "--") # EKF推定値
-ax2.plot(t, x[1],    label="Reference", color="black")
+ax2.plot(t, x[1],    label="True", color="black")
 ax2.plot(t, xhat[1], label="Estimated", color="red", linestyle = "--")
-ax3.plot(t, x[2],    label="Reference", color="black")
+ax3.plot(t, x[2],    label="True", color="black")
 ax3.plot(t, xhat[2], label="Estimated", color="red", linestyle = "--")
-ax4.plot(t, y_true,  label="Reference", color="black")
+ax4.plot(t, y_true,  label="True", color="black")
 ax4.plot(t, y, label="Observed", color="red", linestyle = "--")
 ax1.legend()
 ax2.legend()

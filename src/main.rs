@@ -14,9 +14,11 @@ use std::mem::MaybeUninit;
 // 以下の状態空間モデルを考える．
 // x[k+1] = f(x[k]) + G*w[k],
 // y[k]   = h(x[k]) + v[k].
-// このとき，行列F, G, Hのサイズはそれぞれ
-// F: N×N, G: N×R, H: P×N
-// となる．
+// このとき，各ベクトルのサイズは
+// x: N, y: P
+// また，fとhのヤコビアンと，入力行列のサイズはそれぞれ
+// F: N×N, G: N×M, H: P×N
+// である．
 
 /// 状態変数の個数
 const SYS_N: usize = 3;
@@ -168,7 +170,6 @@ impl ExUdFilter {
         // 線形化と状態変数の更新
         self.calc_jacobian_f();
         self.x = calc_f(self.x);
-        self.calc_jacobian_h();
 
         // qqとwの左NxN要素を初期化
         for j in (1..SYS_N).rev() {
@@ -234,7 +235,10 @@ impl ExUdFilter {
         let mut ff: VectorN<f64> = unsafe {MaybeUninit::uninit().assume_init()};  // U^T H^T
         let mut gg: VectorN<f64> = unsafe {MaybeUninit::uninit().assume_init()};  // D U^T H^T
 
+        // 線形化と，出力の予測値を計算
+        self.calc_jacobian_h();
         let yhat = calc_h(self.x);
+
         // 出力の数だけループ
         for l in 0..SYS_P {
             // y_diff := y - h(x)
